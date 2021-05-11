@@ -1,4 +1,4 @@
-# Guia básico de Instação.
+# Guia básico de Instalação.
 
 Go 🚀
 
