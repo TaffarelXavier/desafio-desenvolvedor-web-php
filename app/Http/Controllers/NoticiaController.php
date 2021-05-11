@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\NoticiaRequest;
 use App\Models\Noticia;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class NoticiaController extends Controller
 {
@@ -12,9 +15,44 @@ class NoticiaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    protected $auth;
+    protected $noticia;
+    protected $params;
+
+    public function __construct(
+        Noticia $noticia
+    ) {
+        $this->middleware(function ($request, $next) {
+            $this->auth = auth()->user();
+
+            return $next($request);
+        });
+        $this->noticia    = $noticia;
+    }
+
+
+    public function index(Request $request)
     {
-        //
+        $this->params = $request->all();
+
+        $noticias = $this->noticia->where('autor_id', $this->auth->id);
+
+        if (array_key_exists('q', $this->params)) {
+            $noticias->where(function ($query) {
+                $filtro =  $this->params['q'];
+                $query->where('titulo', 'like', '%' . $filtro . '%')
+                    ->orWhere('resumo', 'like', '%' . $filtro . '%')
+                    ->orWhere('conteudo', 'like', '%' . $filtro . '%');
+            });
+        }
+
+        $noticias = $noticias->get();
+
+        return view('noticias.index', [
+            'noticias' => $noticias,
+            'params' => $this->params
+        ]);
     }
 
     /**
@@ -24,7 +62,9 @@ class NoticiaController extends Controller
      */
     public function create()
     {
-        //
+        $noticias = $this->noticia->where('autor_id', $this->auth->id)->get();
+        $categorias = Categoria::all()->pluck('nome', 'id');
+        return view('noticias.create', ['noticias' => $noticias, 'categorias' => $categorias]);
     }
 
     /**
@@ -33,9 +73,19 @@ class NoticiaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NoticiaRequest $request)
     {
-        //
+
+        $data = $request->all();
+        $data['autor_id']       = auth()->user()->id;
+        $data['mostrar']        = isset($data['mostrar']);
+        $data['slug']           = Str::slug($data['titulo']);
+        $data['categoria_id']   = (int) $data['categoria_id'];
+        $noticia = $this->noticia->create($data);
+        if ($noticia) {
+            return redirect()->route('noticias.edit', $noticia->id)
+                ->with('success', 'Nova notícia cadastrada com sucesso.');
+        }
     }
 
     /**
@@ -44,9 +94,13 @@ class NoticiaController extends Controller
      * @param  \App\Models\Noticia  $noticia
      * @return \Illuminate\Http\Response
      */
-    public function show(Noticia $noticia)
+    public function show($id)
     {
-        //
+        $noticia        = $this->noticia->find($id);
+        if (!$noticia) {
+            return notfound("Notícia não encontrada.");
+        }
+        return view('noticias.show', ['noticia' => $noticia]);
     }
 
     /**
@@ -55,9 +109,14 @@ class NoticiaController extends Controller
      * @param  \App\Models\Noticia  $noticia
      * @return \Illuminate\Http\Response
      */
-    public function edit(Noticia $noticia)
+    public function edit($id)
     {
-        //
+        $noticia        = $this->noticia->find($id);
+        if (!$noticia) {
+            return notfound("Notícia não encontrada.");
+        }
+        $categorias     = Categoria::all()->pluck('nome', 'id');
+        return view('noticias.edit', ['noticia' => $noticia, 'categorias' => $categorias]);
     }
 
     /**
@@ -67,9 +126,21 @@ class NoticiaController extends Controller
      * @param  \App\Models\Noticia  $noticia
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Noticia $noticia)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $data['autor_id']       = auth()->user()->id;
+        $data['mostrar']        = isset($data['mostrar']);
+        $data['slug']           = Str::slug($data['titulo']);
+        $data['categoria_id']   = (int) $data['categoria_id'];
+        $noticia = $this->noticia->find($id)->update($data);
+        if (!$noticia) {
+            return notfound('Notícia não encontrada');
+        }
+        if ($noticia) {
+            return redirect()->route('noticias.edit', $id)
+                ->with('success', 'A notícia foi atualizada com sucesso.');
+        }
     }
 
     /**
@@ -78,8 +149,14 @@ class NoticiaController extends Controller
      * @param  \App\Models\Noticia  $noticia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Noticia $noticia)
+    public function destroy($id)
     {
-        //
+        $noticia = $this->noticia->where('id', $id)->where('autor_id',  $this->auth->id);
+        if ($noticia->count() == 0) {
+            return json_encode(['status' => 'info', 'message' => 'Item não encontrado']);
+        }
+        if ($noticia->delete()) {
+            return json_encode(['status' => 'success', 'message' => 'Notícia excluída com sucesso.']);
+        }
     }
 }

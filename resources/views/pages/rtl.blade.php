@@ -118,11 +118,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navigation">
             <ul class="navbar-nav  mr-auto">
-              <li class="search-bar input-group">
+              {{-- <li class="search-bar input-group">
                 <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split"></i>
                   <span class="d-lg-none d-md-block">Search</span>
                 </button>
-              </li>
+              </li> --}}
               <li class="dropdown nav-item">
                 <a href="javascript:void(0)" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div class="notification d-none d-lg-block d-xl-block"></div>
@@ -177,7 +177,7 @@
           </div>
         </div>
       </nav>
-      <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+      {{-- <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -188,7 +188,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
       <!-- End Navbar -->
       <div class="content">
         <div class="row">

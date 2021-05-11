@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'register-page', 'page' => _('Register Page'), 'contentClass' => 'register-page'])
+@extends('layouts.app', ['pageSlug'=>'tea', 'class' => 'register-page', 'page' => _('Página de cadastro'), 'contentClass' => 'register-page'])
 
 @section('content')
     <div class="row">
@@ -8,9 +8,9 @@
                     <i class="tim-icons icon-wifi"></i>
                 </div>
                 <div class="description">
-                    <h3 class="info-title">{{ _('Marketing') }}</h3>
+                    <h3 class="info-title">{{ _('Experiência') }}</h3>
                     <p class="description">
-                        {{ _('We\'ve created the marketing campaign of the website. It was a very interesting collaboration.') }}
+                        {{ _('São mais de 11 anos de mercado e centenas de clientes em todo o Brasil, buscando sempre sucesso e produtividade.') }}
                     </p>
                 </div>
             </div>
@@ -19,9 +19,9 @@
                     <i class="tim-icons icon-triangle-right-17"></i>
                 </div>
                 <div class="description">
-                    <h3 class="info-title">{{ _('Fully Coded in HTML5') }}</h3>
+                    <h3 class="info-title">{{ _('Foco no sucesso') }}</h3>
                     <p class="description">
-                        {{ _('We\'ve developed the website with HTML5 and CSS3. The client has access to the code using GitHub.') }}
+                        {{ _('Além de realizar a Transformação Digital no desenvolvimento nos preocupamos com o sucesso de nossos clientes!') }}
                     </p>
                 </div>
             </div>
@@ -30,9 +30,9 @@
                     <i class="tim-icons icon-trophy"></i>
                 </div>
                 <div class="description">
-                    <h3 class="info-title">{{ _('Built Audience') }}</h3>
+                    <h3 class="info-title">{{ _('Responsabilidade') }}</h3>
                     <p class="description">
-                        {{ _('There is also a Fully Customizable CMS Admin Dashboard for this product.') }}
+                        {{ _('Visamos sempre entregar para os nossos clientes um produto de qualidade única, buscando produtividade e inovação!') }}
                     </p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <div class="card card-register card-white">
                 <div class="card-header">
                     <img class="card-img" src="{{ asset('white') }}/img/card-primary.png" alt="Card image">
-                    <h4 class="card-title">{{ _('Register') }}</h4>
+                    <h4 class="card-title" style="color:#0a2736;padding-left:20px;text-transform: capitalize">{{ _('Cadastre-se') }}</h4>
                 </div>
                 <form class="form" method="post" action="{{ route('register') }}">
                     @csrf
@@ -53,7 +53,7 @@
                                     <i class="tim-icons icon-single-02"></i>
                                 </div>
                             </div>
-                            <input type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ _('Name') }}" value="{{ old('name') }}">
+                            <input type="text" autofocus name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ _('Name') }}" value="{{ old('name') }}">
                             @include('alerts.feedback', ['field' => 'name'])
                         </div>
                         <div class="input-group{{ $errors->has('email') ? ' has-danger' : '' }}">
@@ -93,7 +93,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary btn-round btn-lg">{{ _('Get Started') }}</button>
+                        <button type="submit" class="btn btn-primary btn-round btn-lg">{{ _('Iniciar') }}</button>
                     </div>
                 </form>
             </div>
