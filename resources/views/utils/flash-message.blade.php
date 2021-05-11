@@ -34,5 +34,11 @@
     <div class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert">×</button>
         Por favor, verifique o formulário abaixo para erros.
+        <ul>
+            @foreach ($errors->all() as $item)
+                <li>{{ $item}}</li>
+            @endforeach
+        </ul>
     </div>
+
 @endif

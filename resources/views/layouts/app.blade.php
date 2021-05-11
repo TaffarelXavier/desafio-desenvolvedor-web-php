@@ -107,40 +107,88 @@
     <script>
         $(document).ready(function() {
             $().ready(function() {
-                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
-                    keyboard: true
-                });
 
-                $('.excluir-noticia').click(function() {
-                    const _this = $(this);
-                    $('#noticia-id').val(_this.attr('data-id'))
-                    myModal.show()
-                });
+                if (document.getElementById('exampleModal')) {
+
+                    var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {
+                        keyboard: true
+                    });
+
+                    $('.excluir-noticia').click(function() {
+                        const _this = $(this);
+                        $('#noticia-id').val(_this.attr('data-id'))
+                        myModal.show();
+                    });
+
+                    excluir('#excluir-noticia', myModal, '#noticia-id', 'noticias');
+
+                }
+
+                if (document.getElementById('modalUsers')) {
+
+                    var myModaUser = new bootstrap.Modal(document.getElementById('modalUsers'), {
+                        keyboard: true
+                    });
+
+                    $('.excluir-user').click(function() {
+                        const _this = $(this);
+                        $('#user-id').val(_this.attr('data-id'))
+                        myModaUser.show();
+                    });
+
+                    excluir('#excluir-user', myModaUser, '#user-id', 'users');
+
+                }
+
+                // Excluir Categoria
+                if (document.getElementById('modalCategorias')) {
+
+                    var myModaCategoria = new bootstrap.Modal(document.getElementById(
+                        'modalCategorias'), {
+                            keyboard: true
+                        });
+
+                    $('.excluir-categoria').click(function() {
+                        const _this = $(this);
+                        $('#categoria-id').val(_this.attr('data-id'))
+                        myModaCategoria.show();
+                    });
+
+                    excluir('#excluir-categoria', myModaCategoria, '#categoria-id', 'categorias');
+
+                }
 
                 /* Excluir uma notícia usando Ajax. 
                 Podemos usar outros métodos para exclusão além de usar AJAX */
-                $('#excluir-noticia').click(function() {
-                    myModal.hide();
-                    const noticiaId = +$('#noticia-id').val();
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: `noticias/${noticiaId}`,
-                        type: 'DELETE',
-                        contentType: 'application/json',
-                        success: function(result) {
-                            const resp = JSON.parse(result);
-                            if (resp.status == 'info') {
-                                alert('Recurso não encontrado.');
-                            } else if (resp.status == 'success') {
-                                $(`#noticia__${noticiaId}`).remove();
-                                alert('Notícia excluída com sucesso.');
-                            }
-                        },
-                        error: function(result) {}
+
+                function excluir(seletorClick, modal, idSeletorInput, url) {
+                    $(seletorClick).click(function() {
+                        modal.hide();
+                        const noticiaId = +$(idSeletorInput).val();
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                            url: `${url}/${noticiaId}`,
+                            type: 'DELETE',
+                            contentType: 'application/json',
+                            success: function(result) {
+                                const resp = JSON.parse(result);
+                                if (resp.status == 'error') {
+                                    alert('Recurso não encontrado.');
+                                } else if (resp.status == 'success') {
+                                    $(`#${url}__${noticiaId}`).remove();
+                                    alert('Recurso excluída com sucesso.');
+                                } else {
+                                    alert('Ops\n' + resp.message);
+                                }
+                            },
+                            error: function(result) {}
+                        });
                     });
-                });
+                }
+
 
                 $sidebar = $('.sidebar');
                 $navbar = $('.navbar');

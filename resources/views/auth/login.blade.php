@@ -1,8 +1,10 @@
-@extends('layouts.app', ['class' => 'login-page', 'page' => _('Login Page'), 'contentClass' => 'login-page'])
+@extends('layouts.app', ['class' => 'login-page', 'page' => _('Login'), 'contentClass' => 'login-page'])
 
 @section('content')
     <div class="col-md-10 text-center ml-auto mr-auto">
-        <h3 class="mb-5">Desenvolvedor Website/PHP: Login</h3>
+        <img src="https://dixbpo.com/wp-content/uploads/2020/03/Logo-Branco-.png" width="150" alt="logo"
+         style="background:#ba54f5;padding:20px;margin-bottom:20px;" class="mb-4">
+        <h3 class="mb-4">Desenvolvedor Website/PHP: Login</h3>
     </div>
     <div class="col-lg-4 col-md-6 ml-auto mr-auto">
         <form class="form" method="post" action="{{ route('login') }}">
@@ -11,7 +13,7 @@
             <div class="card card-login card-white">
                 <div class="card-header">
                     <img src="{{ asset('white') }}/img/card-primary.png" alt="">
-                    <h1 class="card-title">{{ _('Log in') }}</h1>
+                    <h1 class="card-title" style="padding:10px;">{{ _('Log in') }}</h1>
                 </div>
                 <div class="card-body">
                     <p class="text-dark mb-2"><strong>Autenticação</strong></p>
@@ -35,7 +37,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" href="" class="btn btn-primary btn-lg btn-block mb-3">{{ _('Get Started') }}</button>
+                    <button type="submit" href="" class="btn btn-primary btn-lg btn-block mb-3">{{ _('Inciar') }}</button>
                     <div class="pull-left">
                         <h6>
                             <a href="{{ route('register') }}" class="link footer-link">{{ _('Create Account') }}</a>

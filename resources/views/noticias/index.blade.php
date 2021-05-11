@@ -1,4 +1,4 @@
-@extends('layouts.app', ['pageSlug' => 'dashboard'])
+@extends('layouts.app', ['pageSlug' => 'noticias'])
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -21,8 +21,11 @@
                     <div class="row">
                         <div>
                             <div class="form-group">
-                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp" placeholder="Pesquisar notícias" autofocus>
+                                <form action="" method="get">
+                                    <input type="search" name="q" class="form-control" id="exampleInputEmail1"
+                                        aria-describedby="emailHelp" value="{{ isset($params['q']) ? $params['q'] : '' }}"
+                                        placeholder="Pesquisar notícias" autofocus>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -41,13 +44,14 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($noticias as $noticia)
-                                            <tr id="noticia__{{ $noticia->id }}">
+                                            <tr id="noticias__{{ $noticia->id }}">
                                                 <td>{{ $noticia->titulo }}</td>
                                                 <td>
                                                     {{ strtoupper($noticia->autor->name) }}
                                                 </td>
-                                                <td>{{strtoupper($noticia->categoria->nome)}}</td>
-                                                <td class="text-right">{{datetime($noticia->created_at, null,'d/m/Y')}}</td>
+                                                <td>{{ strtoupper($noticia->categoria->nome) }}</td>
+                                                <td class="text-right">{{ datetime($noticia->created_at, null, 'd/m/Y') }}
+                                                </td>
                                                 <td class="td-actions text-right">
                                                     <a rel="tooltip" class="btn btn-info btn-sm btn-icon"
                                                         href={{ route('noticias.edit', $noticia->id) }}>
@@ -63,7 +67,8 @@
                                     </tbody>
                                 </table>
                             @else
-                                <div class="alert alert-primary d-flex align-items-center justify-content-between " role="alert">
+                                <div class="alert alert-primary d-flex align-items-center justify-content-between "
+                                    role="alert">
                                     Não há nenhuma notícia até agora.
                                     <a class="btn btn-primary" href={{ route('noticias.create') }}>
                                         Adicionar nova

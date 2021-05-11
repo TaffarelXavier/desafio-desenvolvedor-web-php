@@ -35,7 +35,29 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
         });
+    }
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $exception
+     * @return \Illuminate\Http\Response
+     */
+
+    public function render($request, Throwable $exception)
+    {
+        if ($this->isHttpException($exception)) {
+
+            if ($exception->getStatusCode() == 400) {
+                return response()->view('errors.400', ['exception' => $exception], 400);
+            }
+
+            if ($exception->getStatusCode() == 404) {
+                return response()->view('errors.404', ['exception' => $exception, 'message' => 'Página não encontrada'], 404);
+            }
+        }
+
+        return parent::render($request, $exception);
     }
 }
